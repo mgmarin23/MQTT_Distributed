@@ -37,7 +37,8 @@ def publish(client):
 
         topic2 = "plane/service/" + str(seat)
         print(topic2)
-        result = client.publish(topic2, "ok")
+        result = client.publish(topic2, "ok", None, 0, True, None)
+        #self, topic, payload = None, qos = 0, retain = False, properties = None
         #result = client.publish(topic, msg)
 
 

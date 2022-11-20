@@ -30,6 +30,8 @@ def connect_mqtt():
 
 def publish(client):
     msg_count = 0
+    client.publish("plane/pressure", "RETAIN", retain=True)
+    client.will_set("plane/pressure", payload="ERROR CRASH", retain=True)
     while True:
         msg_count += 1
 
@@ -40,13 +42,18 @@ def publish(client):
             msg1 = random.randrange(98, 102, 1)
             msg2 = random.randrange(99, 101)
             msg3 = random.randrange(msg2-1, msg2+1)
+
+            #client.will_set("plane/pressure", "ok", 0, True)
             client.publish("plane/pressure", msg_count)
+
             msg_count += 1
             #result = client.publish(topic, msg)
         while 15 < msg_count < 31:
             time.sleep(1)
             client.publish("plane/pressure", "msg_count")
+
             msg_count += 1
+
 
         while 30 < msg_count < 46:
 
