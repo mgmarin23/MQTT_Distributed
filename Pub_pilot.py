@@ -31,14 +31,14 @@ def connect_mqtt():
 def publish(client):
     msg_count = 0
     while True:
-        seat = random.randrange(1, 20)
-        stime = random.randrange(1, 5)
+        pilot = random.randrange(1, 3)
+        stime = random.randrange(5, 10)
         time.sleep(stime)
         msg = f"messages: {msg_count}"
 
-        topic2 = "plane/service/passenger" + str(seat)
+        topic2 = "plane/service/pilot" + str(pilot)
         print(topic2)
-        result = client.publish(topic2, "ok")
+        result = client.publish(topic2, "assistance", qos=1)
         #self, topic, payload = None, qos = 0, retain = False, properties = None
         #result = client.publish(topic, msg)
 

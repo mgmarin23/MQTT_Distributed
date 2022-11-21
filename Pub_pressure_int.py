@@ -8,7 +8,7 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'localhost'
 port = 1883
-topic = "plane/pressure/external"
+topic = "plane/pressure/internal"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
 # username = 'emqx'
@@ -29,14 +29,9 @@ def connect_mqtt():
 
 
 def publish(client):
-
-    pressure_outside = [0,0,0,0,0,0,1428,2857,4285,5714,7142,8571,10000,10000,10000]
-
-
-
     msg_count = 0
-    client.publish("plane/pressure/external", "RETAIN", retain=True)
-    client.will_set("plane/pressure/external", payload="ERROR CRASH", retain=True)
+    client.publish("plane/pressure", "RETAIN", retain=True)
+    client.will_set("plane/pressure", payload="ERROR CRASH", retain=True)
 
     def fttomb(ft):
         mb = 1013 - (ft / 27)
@@ -46,18 +41,18 @@ def publish(client):
         msg_count += 1
 
         msg = f"messages: {msg_count}"
-        pressure_outside = [0, 0, 0, 0, 0, 0,
-                            1428, 2857, 4285, 5714, 7142, 8571, 10000, 10000, 10000, 10000, 15790, 21600, 27400, 33200,
-                            39000,
-                            39000, 39000, 39000, 39000, 39000, 39000, 39000, 39000, 39000, 39000,
-                            36000, 34500, 31000, 30000, 30000, 30000,
-                            27850, 25710, 23560, 21420, 19280, 17140, 15000, 12850, 10710, 8560, 6420, 2140,
-                            0, 0, 0, 0, 0]
+        pressure_inside = [0, -150, -350, -500, -500, -500,
+                            -100, 200, 600, 1000, 1750, 2700, 4000, 4000, 4000, 4000, 4590, 5200, 6300, 7100,
+                            8000,
+                            8000, 8000, 8000, 8000, 8000, 8000, 8000, 8000, 8000, 8000,
+                            7500, 7100, 6700, 6500, 6500, 6500,
+                            6050, 5610, 4960, 4020, 3480, 2940, 2500, 2050, 1510, 950, 540, 0,
+                            -500, -350, -200, -100, 0]
 
         while msg_count < 60:
             time.sleep(1)
 
-            client.publish("plane/pressure/external", pressure_outside[msg_count])
+            client.publish("plane/pressure/internal", pressure_inside[msg_count])
 
             msg_count += 1
             #result = client.publish(topic, msg)
