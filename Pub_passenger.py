@@ -39,7 +39,7 @@ def publish(client):
             if 21<msg_count<31:
                 seat = random.randrange(1, 20)
                 topic2 = "plane/service/passenger" + str(seat)
-                client.publish(topic2, "service")
+                client.publish(topic2, "service " + str(seat))
 
             msg_count += 1
             # result = client.publish(topic, msg)
