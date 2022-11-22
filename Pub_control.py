@@ -8,7 +8,7 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'localhost'
 port = 1883
-topic = "central"
+topic = "plane/control/control"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
 # username = 'emqx'
@@ -27,30 +27,21 @@ def connect_mqtt():
     client.connect(broker, port)
     return client
 
-
 def publish(client):
     msg_count = 0
     while True:
-        pilot = random.randrange(1, 3)
-        stime = random.randrange(5, 10)
-        time.sleep(stime)
-        msg = f"messages: {msg_count}"
+        while msg_count < 61:
+            time.sleep(1)
+            if msg_count == 0:
+                runway = random.randrange(1, 7)
+                client.publish(topic, "Takes off on runway " + str(runway), qos=1, retain=True)
+            if msg_count == 53:
+                runway2 = random.randrange(1, 7)
+                client.publish(topic, "Land on runway " + str(runway2) , qos=1, retain=True)
 
-        topic2 = "central/" + str(pilot)
-        print(topic2)
-        result = client.publish(topic2, "Land on runway 5", qos=1, retain = True )
-        #self, topic, payload = None, qos = 0, retain = False, properties = None
-        #result = client.publish(topic, msg)
-
-
-        # result: [0, 1]
-        status = result[0]
-        if status == 0:
-            print(f"Send `{msg}` kPa to topic `{topic}`")
-        else:
-            print(f"Failed to send message to topic {topic}")
-        msg_count += 1
-
+            msg_count += 1
+            # result = client.publish(topic, msg)
+        client.disconnect()
 
 def run():
     client = connect_mqtt()

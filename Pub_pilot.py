@@ -30,27 +30,58 @@ def connect_mqtt():
 
 def publish(client):
     msg_count = 0
+    client.publish("control/plane43", "", retain=True)
     while True:
-        pilot = random.randrange(1, 3)
-        stime = random.randrange(5, 10)
-        time.sleep(stime)
-        msg = f"messages: {msg_count}"
 
-        topic2 = "plane/service/pilot" + str(pilot)
-        print(topic2)
-        result = client.publish(topic2, "assistance", qos=1)
+        msg = f"messages: {msg_count}"
+        pilot = random.randrange(1, 3)
+        stime1 = random.randrange(21, 25)
+        stime2 = random.randrange(25, 31)
+
+
+
+
+
         #self, topic, payload = None, qos = 0, retain = False, properties = None
         #result = client.publish(topic, msg)
 
 
         # result: [0, 1]
-        status = result[0]
-        if status == 0:
-            print(f"Send `{msg}` kPa to topic `{topic}`")
-        else:
-            print(f"Failed to send message to topic {topic}")
-        msg_count += 1
 
+
+
+        while msg_count < 61:
+            time.sleep(1)
+            if msg_count == 47:
+                client.publish("control/plane43", "Status OK", retain=True)
+            msg_count += 1
+        '''
+            if -1<msg_count<6:
+                client.publish("plane/service/status", "TAKEOFF")
+            elif 6<msg_count<21:
+                client.publish("plane/service/status", "CLIMB")
+            elif 21<msg_count<31:
+                client.publish("plane/service/status", "CRUISE")
+                topic2 = "plane/service/pilot" + str(pilot)
+                if(msg_count == stime1):
+                    client.publish(topic2, "assistance", qos=1)
+                    client.publish("plane/service/status", "CRUISE")
+                elif(msg_count == stime2):
+                    client.publish(topic2, "assistance", qos=1)
+                    client.publish("plane/service/status", "CRUISE")
+            elif 31 < msg_count < 48:
+                client.publish("plane/service/status", "DESCENDING")
+                if msg_count == 47:
+                    client.publish("control/plane43","Status OK",retain=True)
+            elif 48< msg_count < 60:
+                client.publish("plane/service/status", "GROUND")
+        '''
+
+
+
+            # result = client.publish(topic, msg)
+
+        client.disconnect()
 
 def run():
     client = connect_mqtt()

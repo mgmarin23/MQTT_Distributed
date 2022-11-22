@@ -31,25 +31,19 @@ def connect_mqtt():
 def publish(client):
     msg_count = 0
     while True:
-        seat = random.randrange(1, 20)
-        stime = random.randrange(1, 5)
-        time.sleep(stime)
-        msg = f"messages: {msg_count}"
-
-        topic2 = "plane/service/passenger" + str(seat)
-        print(topic2)
-        result = client.publish(topic2, "ok")
-        #self, topic, payload = None, qos = 0, retain = False, properties = None
-        #result = client.publish(topic, msg)
 
 
-        # result: [0, 1]
-        status = result[0]
-        if status == 0:
-            print(f"Send `{msg}` kPa to topic `{topic}`")
-        else:
-            print(f"Failed to send message to topic {topic}")
-        msg_count += 1
+        while msg_count < 61:
+            time.sleep(1)
+
+            if 21<msg_count<31:
+                seat = random.randrange(1, 20)
+                topic2 = "plane/service/passenger" + str(seat)
+                client.publish(topic2, "service")
+
+            msg_count += 1
+            # result = client.publish(topic, msg)
+        client.disconnect()
 
 
 def run():
