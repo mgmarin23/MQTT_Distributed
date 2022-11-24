@@ -28,14 +28,17 @@ def connect_mqtt():
     return client
 
 def publish(client):
+    client.publish("plane/control", "", qos=1, retain=True)
+    client.publish(topic, "", qos=1, retain=True)
+
     msg_count = 0
     while True:
         while msg_count < 61:
             time.sleep(1)
-            if msg_count == 0:
+            if msg_count == 1:
                 runway = random.randrange(1, 7)
                 client.publish(topic, "Takes off on runway " + str(runway), qos=1, retain=True)
-            if msg_count == 53:
+            if msg_count == 54:
                 runway2 = random.randrange(1, 7)
                 client.publish(topic, "Land on runway " + str(runway2) , qos=1, retain=True)
 

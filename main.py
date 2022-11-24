@@ -12,20 +12,12 @@ import Pub_pilot
 
 import multiprocessing
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
 p1 = multiprocessing.Process(target=Pub_pressure.run)
 p2 = multiprocessing.Process(target=Pub_pressure_int.run)
 p3 = multiprocessing.Process(target=Pub_passenger.run)
 p4 = multiprocessing.Process(target=Pub_pilot.run)
 p5 = multiprocessing.Process(target=Pub_control.run)
 
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     p1.start()
     p2.start()
@@ -37,6 +29,6 @@ if __name__ == '__main__':
 
 
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
 
 

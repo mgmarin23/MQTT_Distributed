@@ -32,27 +32,18 @@ def publish(client):
     msg_count = 0
     client.publish("control/plane43", "", retain=True)
     while True:
-
-        msg = f"messages: {msg_count}"
         pilot = random.randrange(1, 3)
         stime1 = random.randrange(21, 25)
         stime2 = random.randrange(25, 31)
-
-
-
-
-
-        #self, topic, payload = None, qos = 0, retain = False, properties = None
-        #result = client.publish(topic, msg)
-
-
-        # result: [0, 1]
-
-
-
         while msg_count < 61:
             time.sleep(1)
-            if msg_count == 47:
+            if 21 < msg_count < 31:
+                topic2 = "plane/service/pilot" + str(pilot)
+                if msg_count == stime1:
+                    client.publish(topic2, "assistance", qos=1)
+                elif msg_count == stime2:
+                    client.publish(topic2, "assistance", qos=1)
+            elif msg_count == 47:
                 client.publish("control/plane43", "Status OK", retain=True)
             msg_count += 1
         '''
@@ -76,8 +67,6 @@ def publish(client):
             elif 48< msg_count < 60:
                 client.publish("plane/service/status", "GROUND")
         '''
-
-
 
             # result = client.publish(topic, msg)
 
